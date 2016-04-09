@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.post('/', function(req, res) {
   console.log(req);
   return res.send("Hello World");
-}
+})
 
 app.get('/sendMsg', function(req, res) {
   sendMessage("hello");
