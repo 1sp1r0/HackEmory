@@ -2,8 +2,13 @@ var express = require('express');
 var app = express();
 
 var portNum = process.env.PORT || 8888;
+var bodyParser = require('body-parser');
 
-app.get('/', function(req, res) {
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+
+
+app.post('/', function(req, res) {
+  console.log(req.body);
   return res.send("Hello World");
 })
 
@@ -12,3 +17,5 @@ app.listen(portNum, () => {
     console.log("Serving port number " + portNum)
   }
 })
+
+
