@@ -1,6 +1,7 @@
 var express = require('express');
 var request = require('request');
 var nlp      = require('./nlp.js');
+var parser   = require('./parser.js');
 var bodyParser = require('body-parser');
 var app = express();
 var Slackhook = require('slackhook');
@@ -27,9 +28,14 @@ app.get('/sendMsg', function(req, res) {
 })
 
 app.get('/checkMsg', function(req, res) {
-  request(nlp.relationOptions, nlp.callback);
+  //request(nlp.relationOptions, nlp.callback);
   //request(nlp.alch.options, nlp.alch.callback);
   return res.send('/checkMsg ran');
+})
+
+app.get('/tagTest', function(req, res) {
+  parser('This is some sample text. This text can contain multiple sentences.');
+  return res.send('/tagTest sent');
 })
 
 function sendMessage(msg) {
