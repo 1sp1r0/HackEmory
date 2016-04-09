@@ -17,6 +17,29 @@ app.get('/sendMsg', function(req, res) {
   res.send("Hello World");
 })
 
+app.get('/checkMsg', function(req, res) {
+  request(trOptions, trCallback)
+  return res.send('/checkMsg ran')
+})
+
+// Text Razor optioins + callback
+//add gzip encoding
+var trOptions = {
+    url: 'https://api.textrazor.com',
+    headers: {
+        'X-TextRazor-Key': '9663941647bdd337d3697c8d80b5740d39658e5e49ff2819db2b37d3'
+    }
+}
+
+function trCallback(err, resp, body) {
+  if (!err && resp.statusCode === 200) {
+      var info = JSON.parse(body);
+      console.log("200: " + info);
+  } else {
+      console.log("" + resp.statusCode + ": " + info);
+  }
+}
+
 function sendMessage(msg) {
   request({
     method: 'POST',
@@ -28,8 +51,6 @@ function sendMessage(msg) {
     console.log(response);
   });
 }
-
-
 
 app.listen(portNum, () => {
   if (!process.env.PORT) {
