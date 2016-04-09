@@ -14,7 +14,10 @@ app.use(bodyParser.urlencoded());
 
 app.post('/', function(req, res){
     var hook = slack.respond(req.body);
-    res.json({text: 'Hi ' + hook.user_name, username: 'Dr. Nick'});
+    var msg = hook.text;
+    //res.json({text: 'Hi ' + hook.user_name, username: 'Dr. Nick'});
+    sendMessage(msg);
+    res.send("fdsfsa");
 });
 
 app.get('/sendMsg', function(req, res) {
@@ -32,7 +35,7 @@ app.get('/checkMsg', function(req, res) {
 var trOptions = {
     formData: {
        text: 'We going to the park on Thursday!',
-       extractors: 'entities'    
+       extractors: 'entities'
     },
     url: 'https://api.textrazor.com/entities/',
     headers: {
