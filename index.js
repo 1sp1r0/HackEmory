@@ -9,6 +9,6 @@ app.get('/', function(req, res) {
 
 app.listen(portNum, () => {
   if (!process.env.PORT) {
-    console.log(`Serving port number ${portNum}`)
+    console.log("Serving port number " + portNum)
   }
 })
