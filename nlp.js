@@ -33,18 +33,19 @@ module.exports = {
                outputMode: 'json',
                showSourceText: 0,
                anchorDate: '2016-04-09',
-               text: 'We going to the park on Thursday!',
+               text: 'going to the park next Thursday!',
             },
             method: 'POST',
-            url: 'https://gateway-a.watsonplatform.net/calls/text/TextExtractDates/',
+            url: 'https://gateway-a.watsonplatform.net/calls/text/TextExtractDates',
             headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
             }
         },
 
         callback: function (err, resp, body) {
           if (!err && resp.statusCode === 200) {
               var info = JSON.parse(body);
-              console.log("200: " + info.response.sentences[0].position);
+              console.log("200: " + body);
           } else {
               console.log("" + resp.statusCode + ": " + body);
           }
