@@ -8,9 +8,10 @@ module.exports = {
                showSourceText: 0,
                anchorDate: '2016-04-09 11:11:11',
                text: 'let\'s go to school this Tuesday at 6 pm ',
+	       entities: '1'
             },
             method: 'POST',
-            url: 'https://gateway-a.watsonplatform.net/calls/text/TextExtractDates',
+            url: 'https://gateway-a.watsonplatform.net/calls/text/TextGetRelations',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
