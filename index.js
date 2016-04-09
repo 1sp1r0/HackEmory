@@ -1,5 +1,6 @@
 var express = require('express');
-var request = require('request');
+var request = require('request-promise');
+var requestCb = require('request');
 var nlp      = require('./nlp.js');
 var bodyParser = require('body-parser');
 var app = express();
@@ -30,21 +31,48 @@ app.get('/penis', function(req, res) {
 app.post('/slack', function(req, res) {
   var hook = slack.respond(req.body);
   var msg = hook.text;
-  sendMessage("Event "+msg+" was saved to calendar");
-  slackApi.getEmails().then(function(emails) {
-    calendarApi.addEvent(emails, msg);
-  });
-  res.send("sfdsa");
+  var options = nlp.dateTimeOptions;
+  options.form.text = msg;
+  request(options)
+    .then(function(nlpRes) {
+      var nlpInfo = JSON.parse(nlpRes);
+      console.log(nlpInfo);
+      var dates = nlpInfo.dates;
+      if (dates && dates.length > 0) {
+        sendMessage("Event "+msg+" was saved to calendar");
+        return dates[0].date;
+      } else {
+        console.log("no dates");
+        return false;
+      }
+    })
+    .then(function(date) {
+      if (date) {
+        return {
+          email: slackApi.getEmails(),
+          date: date,
+        }
+      } else {
+        return false;
+      }
+    })
+    .then(function(obj) {
+      if (obj) {
+        return calendarApi.addEvent(obj.emails, msg, obj.date);
+      }
+      return;
+    })
 })
 
 app.get('/checkMsg', function(req, res) {
-  request(nlp.dateTimeOptions, nlp.callback);
-  //request(nlp.alch.options, nlp.alch.callback);
+  /*var options = nlp.dateTimeOptions;
+  request(options, nlp.callback);
+  //request(nlp.alch.options, nlp.alch.callback);*/
   return res.send('/checkMsg ran');
 })
 
 function sendMessage(msg) {
-  request({
+  requestCb({
     method: 'POST',
     uri: slackWebhookUrl,
     json: {
