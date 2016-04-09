@@ -1,0 +1,7 @@
+{
+  "name": "nicedo",
+  "dependencies": {
+    "express": "^4.13.4",
+    "request": "^2.70.0"
+  }
+}
