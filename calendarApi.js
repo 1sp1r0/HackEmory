@@ -150,11 +150,11 @@ function addEvent(auth, emails, text) {
     'location': 'his bed',
     'description': 'ayy lmao',
     'start': {
-      'dateTime': '2016-04-09T09:00:00-07:00',
+      'dateTime': '2016-04-10T09:00:00-07:00',
       'timeZone': 'America/Los_Angeles',
     },
     'end': {
-      'dateTime': '2016-04-09T17:00:00-07:00',
+      'dateTime': '2016-04-10T17:00:00-07:00',
       'timeZone': 'America/Los_Angeles',
     },
     'attendees': emails,
