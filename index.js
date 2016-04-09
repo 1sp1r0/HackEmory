@@ -1,6 +1,6 @@
 var express = require('express');
 var request = require('request');
-var tr      = require('./text-razor.js');
+var nlp      = require('./nlp.js');
 var bodyParser = require('body-parser');
 var app = express();
 var Slackhook = require('slackhook');
