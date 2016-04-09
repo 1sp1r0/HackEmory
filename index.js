@@ -4,6 +4,8 @@ var nlp      = require('./nlp.js');
 var bodyParser = require('body-parser');
 var app = express();
 var Slackhook = require('slackhook');
+var calendarApi = require('./calendarApi');
+var slackApi = require('./slackApi');
 var slack = new Slackhook({
     domain: 'hackemorygroup.slack.com',
     token: 'rdNKT6iSLcUvk8DYSi6Lw7na'
@@ -13,17 +15,26 @@ var slackWebhookUrl = 'https://hooks.slack.com/services/T0ZAURDQC/B0ZAZM0SJ/mKEZ
 
 app.use(bodyParser.urlencoded());
 
-app.post('/', function(req, res){
+app.post('/', function(req, res) {
     var hook = slack.respond(req.body);
     var msg = hook.text;
-    //res.json({text: 'Hi ' + hook.user_name, username: 'Dr. Nick'});
     sendMessage(msg);
     res.send("fdsfsa");
 });
 
-app.get('/sendMsg', function(req, res) {
-  sendMessage("hello");
-  res.send("Hello World");
+app.get('/penis', function(req, res) {
+    slackApi.auth();
+    res.send('fdsagdsa');
+});
+
+app.post('/slack', function(req, res) {
+  var hook = slack.respond(req.body);
+  var msg = hook.text;
+  sendMessage("Event "+msg+" was saved to calendar");
+  slackApi.getEmails().then(function(emails) {
+    calendarApi.addEvent(emails, msg);
+  });
+  res.send("sfdsa");
 })
 
 app.get('/checkMsg', function(req, res) {
@@ -40,7 +51,6 @@ function sendMessage(msg) {
       text: msg
     }
   }, function(error, response, body) {
-    console.log(response);
   });
 }
 
