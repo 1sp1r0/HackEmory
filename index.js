@@ -27,7 +27,7 @@ app.get('/sendMsg', function(req, res) {
 })
 
 app.get('/checkMsg', function(req, res) {
-  request(tr.options, tr.callback)
+  request(nlp.tr.options, nlp.tr.callback)
   return res.send('/checkMsg ran')
 })
 
