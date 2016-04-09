@@ -25,16 +25,22 @@ app.get('/checkMsg', function(req, res) {
 // Text Razor optioins + callback
 //add gzip encoding
 var trOptions = {
+    formData: {
+       text: 'We going to the park on Thursday!',
+       extractors: 'entities'    
+    },
     url: 'https://api.textrazor.com/entities/',
     headers: {
-        'X-TextRazor-Key': '9663941647bdd337d3697c8d80b5740d39658e5e49ff2819db2b37d3'
+        'X-TextRazor-Key': '9663941647bdd337d3697c8d80b5740d39658e5e49ff2819db2b37d3',
+	'User-Agent': 'swagmeout1337',
+	'Content-Type':'application/x-ww-form-urlencoded'
     }
 }
 
 function trCallback(err, resp, body) {
   if (!err && resp.statusCode === 200) {
       var info = JSON.parse(body);
-      console.log("200: " + body);
+      console.log("200: " + info.response.entities);
   } else {
       console.log("" + resp.statusCode + ": " + body);
   }
