@@ -26,7 +26,7 @@ app.get('/checkMsg', function(req, res) {
 // Text Razor optioins + callback
 //add gzip encoding
 var trOptions = {
-    url: 'https://api.textrazor.com',
+    url: 'https://api.textrazor.com/entities/',
     headers: {
         'X-TextRazor-Key': '9663941647bdd337d3697c8d80b5740d39658e5e49ff2819db2b37d3'
     }
@@ -35,9 +35,9 @@ var trOptions = {
 function trCallback(err, resp, body) {
   if (!err && resp.statusCode === 200) {
       var info = JSON.parse(body);
-      console.log("200: " + info);
+      console.log("200: " + body);
   } else {
-      console.log("" + resp.statusCode + ": " + info);
+      console.log("" + resp.statusCode + ": " + body);
   }
 }
 
