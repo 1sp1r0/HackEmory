@@ -4,8 +4,8 @@ var bodyParser = require('body-parser');
 var app = express();
 var Slackhook = require('slackhook');
 var slack = new Slackhook({
-    domain: 'yourdomain',
-    token: 'yourtoken'
+    domain: 'hackemorygroup.slack.com',
+    token: 'rdNKT6iSLcUvk8DYSi6Lw7na'
 });
 var portNum = process.env.PORT || 8888;
 var slackWebhookUrl = 'https://hooks.slack.com/services/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';
