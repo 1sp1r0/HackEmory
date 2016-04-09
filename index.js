@@ -10,6 +10,7 @@ var slack = new Slackhook({
 var portNum = process.env.PORT || 8888;
 var slackWebhookUrl = 'https://hooks.slack.com/services/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';
 
+app.use(bodyParser.urlencoded());
 
 app.post('/', function(req, res){
     var hook = slack.respond(req.body);
