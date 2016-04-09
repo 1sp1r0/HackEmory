@@ -9,8 +9,8 @@ var slackWebhookUrl = 'https://hooks.slack.com/services/T0ZAURDQC/B0ZAZM0SJ/mKEZ
 app.use(bodyParser.json());
 
 app.post('/', function(req, res) {
-    console.log(req.text);
-  return res.send(JSON.stringify({text: "penis"}));
+    console.log(req);
+  return res.send("penis");
 })
 
 app.get('/sendMsg', function(req, res) {
