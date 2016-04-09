@@ -27,7 +27,7 @@ app.get('/sendMsg', function(req, res) {
 })
 
 app.get('/checkMsg', function(req, res) {
-  request(nlp.relationOptions, nlp.callback);
+  request(nlp.dateTimeOptions, nlp.callback);
   //request(nlp.alch.options, nlp.alch.callback);
   return res.send('/checkMsg ran');
 })
