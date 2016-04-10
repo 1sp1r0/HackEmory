@@ -46,6 +46,11 @@ app.post('/slack', function(req, res) {
         date = dates[0].date;
         return date;
       } else {
+        var timeRegex = msg.match(/([1-9]|1[0-2])(:[0-5][0-9])? *(pm|am|PM|AM)/);
+        if (timeRegex) {
+          date = "20160409T000000";
+          return date;
+        }
         console.log("no dates");
         return false;
       }
@@ -59,22 +64,26 @@ app.post('/slack', function(req, res) {
     .then(function(emails) {
       console.log("email");
       obj.emails = emails;
-      if (obj) {
+      if (emails) {
         var options = nlp.relationOptions;
         options.form.text = msg;
         return request(options)
           .then(function(nlpRes) {
             var entities = JSON.parse(nlpRes).entities;
             var location = null;
-            var title = null;
+            var title = parser(msg);
+            console.log("title");
+            console.log(title);
             if (entities) {
               location = entities.find(function (entity) {
                 return entity.disambiguated;
               });
-              title = entities.find(function (entity) {
-                return entity.type !== "Person";
-              });
-              obj.title = title ? title.text : null;
+              if (!title) {
+                title = entities.find(function (entity) {
+                  return entity.type !== "Person";
+                }).text;
+              }
+              obj.title = title;
               obj.location = location ? location.text : null;
             }
             return obj;

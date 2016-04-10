@@ -36,7 +36,6 @@ module.exports = function(msg) {
         if (indic1.has(tag) && indic2.has(tagN) ||
                 indic1.has(tagN) && indic2.has(tag) ||
                 indicators.has(word) && indic1.has(tagN)) {
-            console.log("testset");
             if (!(indicators.has(tag) && indic1.has(tagN))) {
                 nameStr += word + " " + wordN + " ";
             }
@@ -52,9 +51,7 @@ module.exports = function(msg) {
         if (nameStr) {
             titles.push(trimIndic(nameStr, indicators));
         }
-        console.log("INFOb:", nameStr);
     }
-    console.log("ASDF:", titles[titles.length-1]);
     return titles.pop();
 }
 
