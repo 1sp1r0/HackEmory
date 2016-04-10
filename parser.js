@@ -52,7 +52,7 @@ module.exports = function(msg) {
             titles.push(trimIndic(nameStr, indicators));
         }
     }
-    return titles.pop();
+    return toTitleCase(titles.pop());
 }
 
 
@@ -66,6 +66,10 @@ function trimIndic(title, indicators) {
     }
 
     return title;
+}
+
+function toTitleCase(str) {
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
            /*     verbs.push(taggedWord);
                 nameStr += word + " ";
