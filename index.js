@@ -95,7 +95,7 @@ app.get('/checkMsg', function(req, res) {
 })
 
 app.get('/tagTest', function(req, res) {
-  parser('This is some sample text. This text can contain multiple sentences.');
+  parser('were going to be hanging out at library from 6 to 8');
   return res.send('/tagTest sent');
 })
 
