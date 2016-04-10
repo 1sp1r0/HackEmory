@@ -144,55 +144,58 @@ function listEvents(auth) {
 }
 
 function addEvent(auth, emails, text, date, location, title) {
-  var calendar = google.calendar('v3');
-  var timeRegex = text.match(/([1-9]|1[0-2])(:[0-5][0-9])? *(pm|am|PM|AM)/);
-  console.log("before parsing"+date);
-  var hours = "00";
-  var minutes = ":00";
-  var endHours = "23";
-  var endMinutes = ":00";
-  var isAm = true;
-  if (timeRegex) {
-    hours = timeRegex[1].length == 2 ? timeRegex[1] : "0"+timeRegex[1];
-    console.log(hours);
-    minutes = timeRegex[2] || ":00";
-    console.log(minutes);
-    isAm = timeRegex[3] && (timeRegex[3] === 'pm' || timeRegex[3] === 'PM') ? false : true;
-    hours = isAm ? hours : ("" + (parseInt(hours) + 12));
-    endHours = "" + (parseInt(hours) + 1);
-    endMinutes = minutes;
-    endHours   = endHours === "24" ? "23" : endHours;
-  }
-  var parsedDate = date.substring(0, 4)+'-'+date.substring(4, 6)+'-'+date.substring(6, 8)+'T'+hours+minutes+':00-04:00';
-  var parsedDate2 = date.substring(0, 4)+'-'+date.substring(4, 6)+'-'+date.substring(6, 8)+'T'+endHours+endMinutes+':00-04:00';
-  console.log(parsedDate);
-  console.log(parsedDate2);
-  console.log(emails);
-  var event = {
-    'summary': title,
-    'location': location,
-    'description': text,
-    'start': {
-      //'dateTime': '2016-04-10T09:00:00-07:00',
-      'dateTime': parsedDate,
-      'timeZone': 'America/New_York',
-    },
-    'end': {
-      //'dateTime': '2016-04-10T17:00:00-07:00',
-      'dateTime': parsedDate2,
-      'timeZone': 'America/New_York',
-    },
-    'attendees': emails,
-  }
-  calendar.events.insert({
-    auth: auth,
-    calendarId: 'primary',
-    resource: event,
-  }, function(err, response) {
-    if (err) {
-      console.log('The API returned an error: ' + err);
-      return;
+  if (date) {
+    var calendar = google.calendar('v3');
+    var timeRegex = text.match(/([1-9]|1[0-2])(:[0-5][0-9])? *(pm|am|PM|AM)/);
+    console.log("before parsing"+date);
+    var hours = "00";
+    var minutes = ":00";
+    var endHours = "23";
+    var endMinutes = ":00";
+    var isAm = true;
+    if (timeRegex) {
+      hours = timeRegex[1].length == 2 ? timeRegex[1] : "0"+timeRegex[1];
+      console.log(hours);
+      minutes = timeRegex[2] || ":00";
+      console.log(minutes);
+      isAm = timeRegex[3] && (timeRegex[3] === 'pm' || timeRegex[3] === 'PM') ? false : true;
+      hours = isAm ? hours : ("" + (parseInt(hours) + 12));
+      endHours = "" + (parseInt(hours) + 1);
+      endMinutes = minutes;
+      endHours   = endHours === "24" ? "23" : endHours;
     }
-    console.log(response);
-  });
+    var parsedDate = date.substring(0, 4)+'-'+date.substring(4, 6)+'-'+date.substring(6, 8)+'T'+hours+minutes+':00-04:00';
+    var parsedDate2 = date.substring(0, 4)+'-'+date.substring(4, 6)+'-'+date.substring(6, 8)+'T'+endHours+endMinutes+':00-04:00';
+    console.log(parsedDate);
+    console.log(parsedDate2);
+    console.log(emails);
+    var event = {
+      'summary': title,
+      'location': location,
+      'description': text,
+      'start': {
+        //'dateTime': '2016-04-10T09:00:00-07:00',
+        'dateTime': parsedDate,
+        'timeZone': 'America/New_York',
+      },
+      'end': {
+        //'dateTime': '2016-04-10T17:00:00-07:00',
+        'dateTime': parsedDate2,
+        'timeZone': 'America/New_York',
+      },
+      'attendees': emails,
+    }
+    calendar.events.insert({
+      auth: auth,
+      calendarId: 'primary',
+      resource: event,
+    }, function(err, response) {
+      if (err) {
+        console.log('The API returned an error: ' + err);
+        return;
+      }
+      console.log(response);
+    });
+
+  }
 }

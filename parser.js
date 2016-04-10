@@ -52,7 +52,8 @@ module.exports = function(msg) {
             titles.push(trimIndic(nameStr, indicators));
         }
     }
-    return toTitleCase(titles.pop());
+    var ret = titles.pop();
+    return toTitleCase(ret);
 }
 
 
@@ -69,7 +70,11 @@ function trimIndic(title, indicators) {
 }
 
 function toTitleCase(str) {
+  if (str) {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+  } else {
+    return str;
+  }
 }
            /*     verbs.push(taggedWord);
                 nameStr += word + " ";

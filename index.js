@@ -81,7 +81,12 @@ app.post('/slack', function(req, res) {
               if (!title) {
                 title = entities.find(function (entity) {
                   return entity.type !== "Person";
-                }).text;
+                });
+                if (title) {
+                  title = title.text;
+                } else {
+                  title = msg;
+                }
               }
               obj.title = title;
               obj.location = location ? location.text : null;
