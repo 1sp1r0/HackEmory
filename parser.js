@@ -54,8 +54,8 @@ module.exports = function(msg) {
         }
         console.log("INFOb:", nameStr);
     }
-    console.log("ASDF:", titles[titles.length-1]);
-    return titles.pop();
+    console.log("ASDF:", toTitleCase(titles[titles.length-1]));
+    return toTitleCase(titles.pop());
 }
 
 
@@ -69,6 +69,10 @@ function trimIndic(title, indicators) {
     }
 
     return title;
+}
+
+function toTitleCase(str) {
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
            /*     verbs.push(taggedWord);
                 nameStr += word + " ";
