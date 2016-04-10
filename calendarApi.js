@@ -15,7 +15,7 @@ var clientSecret = 'inXcgNL4UBvEq1klsspketfj';
   oauth2Client.getToken()
 }*/
 
-exports.addEvent = function(emails, text, date) {
+exports.addEvent = function(emails, text, date, location, title) {
   // Load client secrets from a local file.
   fs.readFile('client_secret.json', function processClientSecrets(err, content) {
     if (err) {
@@ -25,7 +25,7 @@ exports.addEvent = function(emails, text, date) {
     // Authorize a client with the loaded credentials, then call the
     // Google Calendar API.
     console.log(text);
-    authorize(JSON.parse(content), addEvent, emails, text, date);
+    authorize(JSON.parse(content), addEvent, emails, text, date, location, title);
   });
 }
 
@@ -43,7 +43,7 @@ var TOKEN_PATH = TOKEN_DIR + 'calendar-nodejs-quickstart.json';
  * @param {Object} credentials The authorization client credentials.
  * @param {function} callback The callback to call with the authorized client.
  */
-function authorize(credentials, callback, emails, text, date) {
+function authorize(credentials, callback, emails, text, date, location, title) {
   var clientSecret = credentials.web.client_secret;
   var clientId = credentials.web.client_id;
   var redirectUrl = credentials.web.redirect_uris[0];
@@ -56,7 +56,7 @@ function authorize(credentials, callback, emails, text, date) {
       getNewToken(oauth2Client, callback);
     } else {
       oauth2Client.credentials = JSON.parse(token);
-      callback(oauth2Client, emails, text, date);
+      callback(oauth2Client, emails, text, date, location, title);
     }
   });
 }
@@ -143,14 +143,14 @@ function listEvents(auth) {
   });
 }
 
-function addEvent(auth, emails, text, date) {
+function addEvent(auth, emails, text, date, location, title) {
   var calendar = google.calendar('v3');
   var timeRegex = text.match(/([1-9]|1[0-2])(:[0-5][0-9])? *(pm|am|PM|AM)/);
   console.log("before parsing"+date);
   var hours = "00";
   var minutes = ":00";
   var endHours = "23";
-  var endMinutes = "00";
+  var endMinutes = ":00";
   var isAm = true;
   if (timeRegex) {
     hours = timeRegex[1].length == 2 ? timeRegex[1] : "0"+timeRegex[1];
@@ -160,17 +160,18 @@ function addEvent(auth, emails, text, date) {
     isAm = timeRegex[3] && (timeRegex[3] === 'pm' || timeRegex[3] === 'PM') ? false : true;
     hours = isAm ? hours : ("" + (parseInt(hours) + 12));
     endHours = "" + (parseInt(hours) + 1);
+    endMinutes = minutes;
+    endHours   = endHours === "24" ? "23" : endHours;
   }
   var parsedDate = date.substring(0, 4)+'-'+date.substring(4, 6)+'-'+date.substring(6, 8)+'T'+hours+minutes+':00-04:00';
-  var parsedDate2 = date.substring(0, 4)+'-'+date.substring(4, 6)+'-'+date.substring(6, 8)+'T'+endHours+minutes+':00-04:00';
-  //var parsedDate = new Date(date.substring(0, 4), date.substring(4, 6), date.substring(6, 8), date.substring(9, 11), 0, 0);
-  //console.log(parsedDate.toISOString());
+  var parsedDate2 = date.substring(0, 4)+'-'+date.substring(4, 6)+'-'+date.substring(6, 8)+'T'+endHours+endMinutes+':00-04:00';
   console.log(parsedDate);
   console.log(parsedDate2);
+  console.log(emails);
   var event = {
-    'summary': text,
-    'location': 'his bed',
-    'description': 'ayy lmao',
+    'summary': title,
+    'location': location,
+    'description': text,
     'start': {
       //'dateTime': '2016-04-10T09:00:00-07:00',
       'dateTime': parsedDate,
