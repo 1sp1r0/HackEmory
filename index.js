@@ -33,6 +33,8 @@ app.post('/slack', function(req, res) {
   var hook = slack.respond(req.body);
   var msg = hook.text;
   var options = nlp.dateTimeOptions;
+  var date = null;
+  var obj = {};
   options.form.text = msg;
   request(options)
     .then(function(nlpRes) {
@@ -41,27 +43,50 @@ app.post('/slack', function(req, res) {
       var dates = nlpInfo.dates;
       if (dates && dates.length > 0) {
         sendMessage("Event "+msg+" was saved to calendar");
-        return dates[0].date;
+        date = dates[0].date;
+        return date;
       } else {
         console.log("no dates");
         return false;
       }
     })
-    .then(function(date) {
-      if (date) {
-        return {
-          email: slackApi.getEmails(),
-          date: date,
-        }
-      } else {
-        return false;
+    .then(function(dates) {
+      if (dates) {
+        return slackApi.getEmails();
       }
+      return false;
+    })
+    .then(function(emails) {
+      console.log("email");
+      obj.emails = emails;
+      if (obj) {
+        var options = nlp.relationOptions;
+        options.form.text = msg;
+        return request(options)
+          .then(function(nlpRes) {
+            var entities = JSON.parse(nlpRes).entities;
+            var location = null;
+            var title = null;
+            if (entities) {
+              location = entities.find(function (entity) {
+                return entity.disambiguated;
+              });
+              title = entities.find(function (entity) {
+                return entity.type !== "Person";
+              });
+              obj.title = title ? title.text : null;
+              obj.location = location ? location.text : null;
+            }
+            return obj;
+          });
+      }
+      return false;
     })
     .then(function(obj) {
       if (obj) {
-        return calendarApi.addEvent(obj.emails, msg, obj.date);
+        return calendarApi.addEvent(obj.emails, msg, date, obj.location, obj.title);
       }
-      return;
+      return false;
     })
 })
 
